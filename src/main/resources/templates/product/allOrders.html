@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Все заказы</title>
+</head>
+<body>
+<h3>Поиск заказа:</h3>
+
+<form action="/admin/allOrders/search" method="GET">
+    <input type="text" name="orderNumber" maxlength="4" required>
+    <button type="submit">Поиск</button>
+</form>
+
+<h3>Все заказы</h3>
+<div th:each="order : ${orders}">
+    <h3 th:text="'Заказ №' + ${order.getNumber()}"></h3>
+    <img th:src="'/img/' + ${order.getProduct().getImageList()[0].getFileName()}" width="300px">
+    <p th:text="'Наименование: ' + ${order.getProduct().getTitle()}">
+    <p th:text="'Количество: ' + ${order.getCount()}">
+    <p th:text="'Цена: ' + ${order.getPrice()}">
+    <p th:text="'Статус заказа: ' + ${order.getStatus()}">
+    <p th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"></p>
+    <h4>Изменить статус заказа</h4>
+    <form th:action="@{/admin/allOrders/{orderId}/update-status(orderId=${order.id})}" method="get">
+        <select name="status">
+            <option value="Принят">Принят</option>
+            <option value="Оформлен">Оформлен</option>
+            <option value="Ожидает">Ожидает</option>
+            <option value="Получен">Получен</option>
+        </select>
+        <button type="submit">Обновить статус</button>
+    </form>
+</div>
+</body>
+</html>
